@@ -1150,7 +1150,7 @@ function createGalleryContent() {
         'images/IMG_8725.jpg',
         'images/IMG_9104 2.jpg',
         'images/IMG_9461.jpg',
-        'images/IMG_9374.heic'
+        'images/IMG_9657.JPG'
     ];
 
     const captions = [
