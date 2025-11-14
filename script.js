@@ -2,6 +2,7 @@
 const state = {
     password: 'iloveyou', // Change this to your desired password
     unlockedContent: [],
+    completedGames: [], // ✅ TAMBAH INI - track games yang sudah selesai
     currentScreen: 'password',
     musicPlaying: false,
     theme: 'light' // default theme
@@ -72,6 +73,16 @@ function animateCharacter(e) {
 
 // Math Puzzle Game
 function startMathPuzzle() {
+    // ✅ TAMBAH INI - Check if game already completed
+    if (state.completedGames.includes('mathpuzzle')) {
+        alert('You already completed this game! 😊');
+        return;
+    }
+    
+    // ✅ TAMBAH INI - Store current quiz type
+    const modal = document.getElementById('quizModal');
+    modal.setAttribute('data-current-quiz', 'mathpuzzle');
+    
     const mathHTML = `
         <div class="math-puzzle-container">
             <h2 class="quiz-title">🧮 Advanced Math Challenge</h2>
@@ -478,8 +489,81 @@ function updateCardStates() {
             status.innerHTML = '<i class="fas fa-unlock"></i> Unlocked!';
         }
     });
+
+    // ✅ TAMBAH INI - Update activity/game cards
+    document.querySelectorAll('.activity-card').forEach(card => {
+        const quizType = card.getAttribute('data-quiz');
+        const btn = card.querySelector('.btn-secondary');
+        
+        if (state.completedGames.includes(quizType)) {
+            // Game sudah dimainkan - disable
+            card.style.opacity = '0.5';
+            card.style.pointerEvents = 'none';
+            btn.textContent = '✓ Completed';
+            btn.style.background = '#95a5a6';
+            btn.style.cursor = 'not-allowed';
+        }
+    });
+    
+    // ✅ TAMBAH INI - Check if Flowers should be unlocked
+    checkFlowersUnlock();
     
     updateProgressIndicator();
+}
+
+// ✅ FUNCTION BARU - Check & unlock Flowers automatically
+function checkFlowersUnlock() {
+    const requiredContent = ['letter', 'music', 'gallery', 'birthday'];
+    const allUnlocked = requiredContent.every(content => state.unlockedContent.includes(content));
+    
+    if (allUnlocked && !state.unlockedContent.includes('flowers')) {
+        // Auto unlock flowers dengan animasi special
+        setTimeout(() => {
+            showFlowersSurprise();
+        }, 1000);
+    }
+}
+
+// ✅ FUNCTION BARU - Show flowers surprise
+function showFlowersSurprise() {
+    const modal = document.getElementById('quizModal');
+    const content = document.getElementById('quizContent');
+    
+    content.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 5rem; margin-bottom: 30px; animation: bounce 1s ease infinite;">
+                🌸
+            </div>
+            <h2 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px;">
+                A Special Surprise! 💕
+            </h2>
+            <p style="font-size: 1.2rem; color: #555; line-height: 1.8; margin-bottom: 30px;">
+                You've discovered all our memories together!<br>
+                As a reward, I've prepared a blooming garden just for you... 🌺
+            </p>
+            <button class="btn-primary" onclick="unlockFlowersAndShow()" style="font-size: 1.2rem; padding: 15px 40px;">
+                Open My Garden 🌷
+            </button>
+        </div>
+        <style>
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-20px); }
+            }
+        </style>
+    `;
+    
+    modal.classList.add('active');
+    createConfetti();
+}
+
+// ✅ FUNCTION BARU - Unlock flowers and show content
+function unlockFlowersAndShow() {
+    unlockContent('flowers');
+    closeModal();
+    setTimeout(() => {
+        showContent('flowers');
+    }, 500);
 }
 
 function updateProgressIndicator() {
@@ -499,14 +583,25 @@ function updateProgressIndicator() {
         
         if (unlocked === total) {
             progressText.innerHTML = `🎉 All Contents Unlocked! You're Amazing! 💕`;
+        } else if (unlocked === 4 && !state.unlockedContent.includes('flowers')) {
+            progressText.innerHTML = `✨ Almost there! A surprise is waiting... 💝`;
         }
     }
 }
 
 // Quiz System
 function startQuiz(quizType) {
+    // ✅ TAMBAH INI - Check if game already completed
+    if (state.completedGames.includes(quizType)) {
+        alert('You already completed this game! 😊');
+        return;
+    }
+    
     const modal = document.getElementById('quizModal');
     const content = document.getElementById('quizContent');
+    
+    // ✅ TAMBAH INI - Store current quiz type
+    modal.setAttribute('data-current-quiz', quizType);
     
     switch (quizType) {
         case 'crossword':
@@ -1518,12 +1613,12 @@ function createFallingPetals() {
 
 // Helper Functions
 function showUnlockChoices() {
-    const allContent = ['letter', 'music', 'gallery', 'birthday', 'flowers'];
+    const allContent = ['letter', 'music', 'gallery', 'birthday']; // ✅ HAPUS 'flowers' dari sini
     const locked = allContent.filter(c => !state.unlockedContent.includes(c));
     
     if (locked.length === 0) {
         document.getElementById('unlockChoices').innerHTML = `
-            <p style="margin: 20px 0; color: #7f8c8d;">All content already unlocked! 🎉</p>
+            <p style="margin: 20px 0; color: #7f8c8d;">All regular content already unlocked! 🎉</p>
             <button class="btn-primary" onclick="closeModal()">Close</button>
         `;
         return;
@@ -1533,8 +1628,7 @@ function showUnlockChoices() {
         letter: '💌 Love Letter',
         music: '🎵 Music Playlist',
         gallery: '📸 Gallery',
-        birthday: '🎂 Birthday Wish',
-        flowers: '🌸 Flower Garden'
+        birthday: '🎂 Birthday Wish'
     };
     
     const choicesHTML = locked.map(content => `
@@ -1553,12 +1647,19 @@ function showUnlockChoices() {
 function selectUnlock(contentType) {
     unlockContent(contentType);
     
+    // ✅ TAMBAH INI - Mark game as completed
+    const currentQuiz = document.getElementById('quizModal').getAttribute('data-current-quiz');
+    if (currentQuiz && !state.completedGames.includes(currentQuiz)) {
+        state.completedGames.push(currentQuiz);
+        saveProgress(); // Save completed games
+    }
+    
     // Create confetti effect
     createConfetti();
     
     document.getElementById('unlockChoices').innerHTML = `
         <div class="success-message sparkle" style="margin-top: 20px;">
-            Content unlocked successfully!
+            Content unlocked successfully! 🎉
         </div>
         <button class="btn-primary" onclick="closeModal()" style="margin-top: 20px;">Close</button>
     `;
@@ -1621,14 +1722,22 @@ function closeModal() {
 // Local Storage
 function saveProgress() {
     localStorage.setItem('loveWebsiteProgress', JSON.stringify(state.unlockedContent));
+    localStorage.setItem('loveWebsiteCompletedGames', JSON.stringify(state.completedGames)); // ✅ TAMBAH INI
 }
 
 function loadSavedProgress() {
     const saved = localStorage.getItem('loveWebsiteProgress');
     if (saved) {
         state.unlockedContent = JSON.parse(saved);
-        updateCardStates();
     }
+    
+    // ✅ TAMBAH INI - Load completed games
+    const savedGames = localStorage.getItem('loveWebsiteCompletedGames');
+    if (savedGames) {
+        state.completedGames = JSON.parse(savedGames);
+    }
+    
+    updateCardStates();
 }
 
 // Evasive modal state
