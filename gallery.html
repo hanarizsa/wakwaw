@@ -652,6 +652,7 @@
 
         // Music Control
         let musicPlaying = false;
+        let musicStarted = false;
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         const musicIcon = document.getElementById('musicIcon');
@@ -673,6 +674,41 @@
         }
         
         musicToggle.addEventListener('click', toggleMusic);
+        
+        // Auto-play music on first user interaction
+        function startMusic() {
+            if (!musicStarted) {
+                bgMusic.play().then(() => {
+                    musicToggle.classList.add('playing');
+                    musicIcon.textContent = '🎶';
+                    musicPlaying = true;
+                    musicStarted = true;
+                    console.log('Music started!');
+                }).catch(() => {
+                    console.log('Auto-play blocked. Click music button to play.');
+                });
+            }
+        }
+        
+        // Try autoplay on page load
+        window.addEventListener('load', () => {
+            // Try direct autoplay first
+            setTimeout(() => {
+                startMusic();
+            }, 500);
+        });
+        
+        // Fallback: play on first user interaction
+        const autoplayEvents = ['click', 'touchstart', 'scroll', 'mousemove', 'keydown'];
+        autoplayEvents.forEach(event => {
+            document.addEventListener(event, function handler() {
+                startMusic();
+                // Remove listeners after first interaction
+                autoplayEvents.forEach(e => {
+                    document.removeEventListener(e, handler);
+                });
+            }, { once: true });
+        });
         
         // Initialize
         createFloatingHearts();
