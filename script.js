@@ -531,12 +531,10 @@ function createCrosswordQuiz() {
         <div class="quiz-container">
             <h2 class="quiz-title">🎯 Love Crossword</h2>
             <p style="margin-bottom: 20px;">Fill in the crossword with words about me!</p>
-
             <div class="crossword-container">
-                <div id="crosswordGrid" style="display: grid; grid-template-columns: repeat(6, 45px); gap: 3px; margin: 20px auto; width: fit-content;">
+                <div id="crosswordGrid" style="display: grid; grid-template-columns: repeat(7, 45px); gap: 3px; margin: 20px auto; width: fit-content;">
                     ${generateCrosswordGrid()}
                 </div>
-
                 <div style="text-align: left; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
                     <h4 style="margin-bottom: 15px;">Clues:</h4>
                     <div style="display: grid; gap: 10px;">
@@ -548,7 +546,6 @@ function createCrosswordQuiz() {
                     </div>
                 </div>
             </div>
-
             <button class="btn-primary" onclick="checkCrossword()" style="margin-top: 30px;">
                 Check Answers
             </button>
@@ -557,8 +554,9 @@ function createCrosswordQuiz() {
 }
 
 function generateCrosswordGrid() {
-    // Grid layout based on the crossword structure
-    // Grid is 7 cols x 10 rows
+    // Grid layout: 7 cols x 10 rows
+    // FLORAL (vertical col 1), MOCHI (horizontal row 2), CANTIK (horizontal row 4)
+    // KAWONA (vertical col 5), PINK (horizontal row 8, N shares with KAWONA)
     const grid = [
         // Row 0
         ['black', 'F', 'black', 'black', 'black', 'black', 'black'],
@@ -570,18 +568,18 @@ function generateCrosswordGrid() {
         ['black', 'R', 'black', 'black', 'black', 'black', 'black'],
         // Row 4: CANTIK (horizontal)
         ['C', 'A', 'N', 'T', 'I', 'K', 'black'],
-        // Row 5
+        // Row 5: L dari FLORAL, A dari KAWONA
         ['black', 'L', 'black', 'black', 'black', 'A', 'black'],
-        // Row 6
+        // Row 6: W dari KAWONA
         ['black', 'black', 'black', 'black', 'black', 'W', 'black'],
-        // Row 7
+        // Row 7: O dari KAWONA
         ['black', 'black', 'black', 'black', 'black', 'O', 'black'],
-        // Row 8: PINK (horizontal)
+        // Row 8: PINK (horizontal), N shared dengan KAWONA
         ['black', 'black', 'black', 'P', 'I', 'N', 'K'],
-        // Row 9
+        // Row 9: A dari KAWONA
         ['black', 'black', 'black', 'black', 'black', 'A', 'black']
     ];
-
+    
     let html = '';
     grid.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
@@ -596,7 +594,6 @@ function generateCrosswordGrid() {
             }
         });
     });
-
     return html;
 }
 
@@ -1155,12 +1152,12 @@ function createMusicContent() {
 }
 
 function createGalleryContent() {
-    // Array gambar - Upload foto ke folder images/ di GitHub!
+    // Array gambar - PASTIKAN nama file sesuai dengan yang di folder!
     const images = [
         'images/IMG_5916.jpg',
         'images/IMG_6106.jpg',
         'images/IMG_8725.jpg',
-        'images/IMG_9104 2.jpg',
+        'images/IMG_9104_2.jpg',
         'images/IMG_9461.jpg',
         'images/IMG_9657.jpg'
     ];
@@ -1181,10 +1178,10 @@ function createGalleryContent() {
             <div class="gallery-grid">
                 ${images.map((imgPath, i) => `
                     <div class="gallery-item">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23ccc' font-size='20'%3ELoading...%3C/text%3E%3C/svg%3E" 
-                             data-src="${imgPath}" 
+                        <img src="${imgPath}" 
                              alt="${captions[i]}" 
-                             class="lazy-image"
+                             loading="lazy"
+                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px;"
                              onerror="this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'>${['💑', '🌹', '💕', '🎂', '🌟', '💝'][i]}</div>'">
                         <div class="gallery-caption">${captions[i]}</div>
                     </div>
@@ -1242,10 +1239,6 @@ function showContent(contentType) {
     content.innerHTML = html;
     modal.classList.add('active');
     
-    // ✅ TAMBAHKAN INI - Lazy load setelah modal terbuka
-    if (contentType === 'gallery') {
-        setTimeout(() => lazyLoadImages(), 100);
-    }
 }
 
 // Caesar Cipher Functions
