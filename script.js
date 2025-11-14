@@ -1145,12 +1145,12 @@ function createMusicContent() {
 function createGalleryContent() {
     // Array gambar - Upload foto ke folder images/ di GitHub!
     const images = [
-        'images/photo1.jpg',
-        'images/photo2.jpg',
-        'images/photo3.jpg',
-        'images/photo4.jpg',
-        'images/photo5.jpg',
-        'images/photo6.jpg'
+        'images/IMG_5916.JPG',
+        'images/IMG_6106.jpg',
+        'images/IMG_8725.jpg',
+        'images/IMG_9104 2.jpg',
+        'images/IMG_9461.jpg',
+        'images/IMG_9374.heic'
     ];
 
     const captions = [
