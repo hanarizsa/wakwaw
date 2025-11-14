@@ -397,7 +397,7 @@
 <body>
     <!-- ✅ TAMBAH INI - Background Music -->
     <audio id="bgMusic" loop>
-        <source src="music-gallery.mp3" type="audio/mpeg">
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
     
     <!-- ✅ TAMBAH INI - Music Control Button -->
@@ -650,7 +650,7 @@
             }
         });
 
-    // Music Control
+        // Music Control
         let musicPlaying = false;
         const bgMusic = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
@@ -672,7 +672,7 @@
         
         musicToggle.addEventListener('click', toggleMusic);
         
-        // Auto-play (optional - comment out if you don't want auto-play)
+        // Auto-play music (optional)
         window.addEventListener('load', () => {
             setTimeout(() => {
                 bgMusic.play().then(() => {
