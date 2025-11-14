@@ -270,6 +270,7 @@ function createFloatingHearts() {
     const container = document.getElementById('hearts-container');
     const heartSymbols = ['💕', '💖', '💗', '💝', '💘', '❤️', '💓'];
     
+    // ✅ GANTI dari 500ms jadi 1500ms (3x lebih jarang)
     setInterval(() => {
         const heart = document.createElement('div');
         heart.className = 'heart';
@@ -283,9 +284,8 @@ function createFloatingHearts() {
         setTimeout(() => {
             heart.remove();
         }, 10000);
-    }, 500);
+    }, 1500); // ✅ Dari 500ms jadi 1500ms
 }
-
 // Event Listeners Setup
 function setupEventListeners() {
     // Password Screen
@@ -1164,16 +1164,14 @@ function createGalleryContent() {
         'images/IMG_9461.jpg',
         'images/IMG_9657.jpg'
     ];
-
     const captions = [
-        'Moment 1',    // Ganti dengan caption untuk setiap foto
+        'Moment 1',
         'Moment 2',
         'Moment 3',
         'Moment 4',
         'Moment 5',
         'Moment 6'
     ];
-
     return `
         <div class="content-display">
             <h2>📸 Our Memories Together</h2>
@@ -1183,13 +1181,71 @@ function createGalleryContent() {
             <div class="gallery-grid">
                 ${images.map((imgPath, i) => `
                     <div class="gallery-item">
-                        <img src="${imgPath}" alt="${captions[i]}" onerror="this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'>${['💑', '🌹', '💕', '🎂', '🌟', '💝'][i]}</div>'">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%23ccc' font-size='20'%3ELoading...%3C/text%3E%3C/svg%3E" 
+                             data-src="${imgPath}" 
+                             alt="${captions[i]}" 
+                             class="lazy-image"
+                             onerror="this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'>${['💑', '🌹', '💕', '🎂', '🌟', '💝'][i]}</div>'">
                         <div class="gallery-caption">${captions[i]}</div>
                     </div>
                 `).join('')}
             </div>
         </div>
     `;
+}
+
+// Lazy Loading untuk gambar
+function lazyLoadImages() {
+    const lazyImages = document.querySelectorAll('.lazy-image');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy-image');
+                img.classList.add('loaded');
+                observer.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: '50px' // Load gambar 50px sebelum terlihat
+    });
+    
+    lazyImages.forEach(img => imageObserver.observe(img));
+}
+
+// Panggil setelah modal gallery dibuka
+function showContent(contentType) {
+    const modal = document.getElementById('contentModal');
+    const content = document.getElementById('modalContent');
+    
+    let html = '';
+    
+    switch (contentType) {
+        case 'letter':
+            html = createLetterContent();
+            break;
+        case 'music':
+            html = createMusicContent();
+            break;
+        case 'gallery':
+            html = createGalleryContent();
+            break;
+        case 'birthday':
+            html = createBirthdayContent();
+            break;
+        case 'flowers':
+            html = createFlowersContent();
+            break;
+    }
+    content.innerHTML = html;
+    modal.classList.add('active');
+    
+    // ✅ TAMBAHKAN INI - Lazy load setelah modal terbuka
+    if (contentType === 'gallery') {
+        setTimeout(() => lazyLoadImages(), 100);
+    }
 }
 
 // Caesar Cipher Functions
@@ -1553,21 +1609,23 @@ function selectUnlock(contentType) {
 
 function createConfetti() {
     const colors = ['#ff6b9d', '#c44569', '#ffc6d9', '#ff9ff3', '#feca57', '#48dbfb'];
-    const confettiCount = 50;
+    const confettiCount = 25; // ✅ Dari 50 jadi 25
     
     for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 0.5 + 's';
-        confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
-        
-        document.body.appendChild(confetti);
-        
         setTimeout(() => {
-            confetti.remove();
-        }, 4000);
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+            
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => {
+                confetti.remove();
+            }, 4000);
+        }, i * 50);
     }
 }
 
