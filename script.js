@@ -561,25 +561,25 @@ function generateCrosswordGrid() {
     // Grid is 6 cols x 10 rows
     const grid = [
         // Row 0
-        ['black', 'F', 'black', 'black', 'black', 'black'],
+        ['black', 'F', 'black', 'black', 'black', 'black', 'black'],
         // Row 1
-        ['black', 'L', 'black', 'black', 'black', 'black'],
+        ['black', 'L', 'black', 'black', 'black', 'black', 'black'],
         // Row 2: MOCHI (horizontal)
-        ['M', 'O', 'C', 'H', 'I', 'black'],
+        ['M', 'O', 'C', 'H', 'I', 'black', 'black'],
         // Row 3
-        ['black', 'R', 'black', 'black', 'black', 'black'],
+        ['black', 'R', 'black', 'black', 'black', 'black', 'black'],
         // Row 4: CANTIK (horizontal)
         ['C', 'A', 'N', 'T', 'I', 'K'],
         // Row 5
-        ['black', 'L', 'black', 'black', 'black', 'A'],
+        ['black', 'L', 'black', 'black', 'black', 'A', 'black'],
         // Row 6
-        ['black', 'black', 'black', 'black', 'black', 'W'],
+        ['black', 'black', 'black', 'black', 'black', 'W', 'black'],
         // Row 7
-        ['black', 'black', 'black', 'black', 'black', 'O'],
+        ['black', 'black', 'black', 'black', 'black', 'O', 'black],
         // Row 8: PINK (horizontal)
-        ['black', 'black', 'P', 'I', 'N', 'K'],
+        ['black', 'black', 'black', 'P', 'I', 'N', 'K'],
         // Row 9
-        ['black', 'black', 'black', 'black', 'black', 'A']
+        ['black', 'black', 'black', 'black', 'black', 'A', 'black]
     ];
 
     let html = '';
