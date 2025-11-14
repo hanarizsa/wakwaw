@@ -575,11 +575,11 @@ function generateCrosswordGrid() {
         // Row 6
         ['black', 'black', 'black', 'black', 'black', 'W', 'black'],
         // Row 7
-        ['black', 'black', 'black', 'black', 'black', 'O', 'black],
+        ['black', 'black', 'black', 'black', 'black', 'O', 'black'],
         // Row 8: PINK (horizontal)
         ['black', 'black', 'black', 'P', 'I', 'N', 'K'],
         // Row 9
-        ['black', 'black', 'black', 'black', 'black', 'A', 'black]
+        ['black', 'black', 'black', 'black', 'black', 'A', 'black']
     ];
 
     let html = '';
