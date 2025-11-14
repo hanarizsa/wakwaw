@@ -663,7 +663,9 @@
                 musicIcon.textContent = '🎵';
                 musicPlaying = false;
             } else {
-                bgMusic.play();
+                bgMusic.play().catch(err => {
+                    console.log('Music play error:', err);
+                });
                 musicToggle.classList.add('playing');
                 musicIcon.textContent = '🎶';
                 musicPlaying = true;
@@ -671,19 +673,6 @@
         }
         
         musicToggle.addEventListener('click', toggleMusic);
-        
-        // Auto-play music (optional)
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                bgMusic.play().then(() => {
-                    musicToggle.classList.add('playing');
-                    musicIcon.textContent = '🎶';
-                    musicPlaying = true;
-                }).catch(() => {
-                    console.log('Auto-play blocked. Click music button to play.');
-                });
-            }, 1000);
-        });
         
         // Initialize
         createFloatingHearts();
