@@ -1020,6 +1020,13 @@ function updateMemoryStatus() {
 
 // Content Display
 function showContent(contentType) {
+    // Special handling for gallery - redirect to separate page
+    if (contentType === 'gallery') {
+        window.location.href = 'gallery.html';
+        return;
+    }
+    
+    // For other content, show in modal as usual
     const modal = document.getElementById('contentModal');
     const content = document.getElementById('modalContent');
     
@@ -1032,9 +1039,6 @@ function showContent(contentType) {
         case 'music':
             html = createMusicContent();
             break;
-        case 'gallery':
-            html = createGalleryContent();
-            break;
         case 'birthday':
             html = createBirthdayContent();
             break;
@@ -1042,7 +1046,6 @@ function showContent(contentType) {
             html = createFlowersContent();
             break;
     }
-
     content.innerHTML = html;
     modal.classList.add('active');
 }
@@ -1152,43 +1155,9 @@ function createMusicContent() {
 }
 
 function createGalleryContent() {
-    // Array gambar - PASTIKAN nama file sesuai dengan yang di folder!
-    const images = [
-        'images/IMG_5916.jpg',
-        'images/IMG_6106.jpg',
-        'images/IMG_8725.jpg',
-        'images/IMG_9104_2.jpg',
-        'images/IMG_9461.jpg',
-        'images/IMG_9657.jpg'
-    ];
-    const captions = [
-        'Moment 1',
-        'Moment 2',
-        'Moment 3',
-        'Moment 4',
-        'Moment 5',
-        'Moment 6'
-    ];
-    return `
-        <div class="content-display">
-            <h2>📸 Our Memories Together</h2>
-            <p style="text-align: center; margin-bottom: 30px; color: #7f8c8d;">
-                Our beautiful moments captured in time 💕
-            </p>
-            <div class="gallery-grid">
-                ${images.map((imgPath, i) => `
-                    <div class="gallery-item">
-                        <img src="${imgPath}" 
-                             alt="${captions[i]}" 
-                             loading="lazy"
-                             style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px;"
-                             onerror="this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'>${['💑', '🌹', '💕', '🎂', '🌟', '💝'][i]}</div>'">
-                        <div class="gallery-caption">${captions[i]}</div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
+    // Redirect to gallery.html instead of showing in modal
+    window.location.href = 'gallery.html';
+    return ''; // Return empty string since we're redirecting
 }
 
 // Lazy Loading untuk gambar
